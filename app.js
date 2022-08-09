@@ -1,20 +1,31 @@
 const express = require('express');
 const mongoose = require('mongoose');
+
+// Appel de app : notre application
 const app = express();
+
+// Appel de path : donne accès au chemin du système des fichiers
 const path = require('path');
+
+// Appel de helmet : permet de sécuriser les entêtes http
 const helmet = require('helmet');
+
+// Appel de dotenv : qui stocke des variables d'environnement
 require('dotenv').config();
+
+// Appel de rateLimit : limite la demande de l'utilisateur
 const rateLimit = require('express-rate-limit');
+
+// Appel de hpp : middleware d'express qui protège contre les attaques de paramètres de pollution http
 const hpp = require('hpp');
 
 
 
-
-
-
+// Appel des différentes routes
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
+// Connecter env à mongoose
 mongoose.connect(process.env.SECRET_DB,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
@@ -33,7 +44,7 @@ app.use((req, res, next) => {
   next();
 });
 
-
+// CORS : définit comment les serveurs et navigateurs intéragissent : spécifie quelles ressources peuvent être demandées
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');

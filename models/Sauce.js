@@ -1,5 +1,7 @@
+// Appel de Mongoose : permet de créer un schéma de données
 const mongoose = require('mongoose');
 
+// Créer un schéma de données avec les informations nécessaires pour chaque sauce
 const sauceSchema = mongoose.Schema({
   userId: { type: String, required: true },
   name: { type: String, required: true },
@@ -14,4 +16,5 @@ const sauceSchema = mongoose.Schema({
   usersDisliked: { type: [String] },
 });
 
+// Exporter ce schéma en tant que modèle mongoose avec les propriétés de sauceSchema
 module.exports = mongoose.model('Sauce', sauceSchema);

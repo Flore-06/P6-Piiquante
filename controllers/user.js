@@ -1,9 +1,18 @@
+// Appel de bcrypt : algorythme de hachage
 const bcrypt = require('bcrypt');
+
+// Appel de jwt : jeton d'identification communiqué entre serveur/client
 const jwt = require('jsonwebtoken');
 
+// Appel du modèle User
 const User = require('../models/User');
+
+// Appel du passwordValidator : demande des mots de passe complexes
 var passwordValidator = require('password-validator');
 
+
+
+// Enregistrer de nouveaux utilisateurs
 exports.signup = (req, res, next) => {
     // Create a schema
     var schema = new passwordValidator();
@@ -18,6 +27,7 @@ exports.signup = (req, res, next) => {
     .has().not().spaces()                           // Should not have spaces
     .is().not().oneOf(['Passw0rd', 'Password123']); // Blacklist these values
 
+    // Inscription faite si propriétés respectées
     if (schema.validate(req.body.password) == true) {
         bcrypt.hash(req.body.password, 10)
       .then(hash => {
@@ -32,12 +42,15 @@ exports.signup = (req, res, next) => {
       .catch(error => res.status(500).json({ error }));
     }
     
-    else return res.status(400).json({ error: 'Format du mot de passe non respecté!' });
-    
+    // Génère une erreur si propriétés du mot de passe non respectées
+    else {
+        return res.status(400).json({ error: 'Format du mot de passe non respecté! Choisissez un mot de passe entre 8 et 100 caractères, au moins une lettre capitale et minuscule, et minimum deux chiffres' })
+    }
+            
 };
 
 
-
+// Identification/login d'un user
 exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then(user => {
