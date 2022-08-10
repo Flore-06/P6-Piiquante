@@ -10,14 +10,16 @@ const path = require('path');
 // Appel de helmet : permet de sécuriser les entêtes http
 const helmet = require('helmet');
 
+const cors = require('cors');
+
 // Appel de dotenv : qui stocke des variables d'environnement
 require('dotenv').config();
 
 // Appel de rateLimit : limite la demande de l'utilisateur
-const rateLimit = require('express-rate-limit');
+//const rateLimit = require('express-rate-limit');
 
 // Appel de hpp : middleware d'express qui protège contre les attaques de paramètres de pollution http
-const hpp = require('hpp');
+//const hpp = require('hpp');
 
 
 
@@ -39,12 +41,21 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
   res.status(201);
   next();
-});
+});*/
 
 // CORS : définit comment les serveurs et navigateurs intéragissent : spécifie quelles ressources peuvent être demandées
+app.use(cors());
+//app.use(helmet());
+app.use(
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    // ...
+  })
+);
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -52,10 +63,12 @@ app.use((req, res, next) => {
   next();
 })
 
+
 app.use(express.json());
-app.use(helmet());
-app.use(rateLimit());
-app.use(hpp());
+
+
+//app.use(rateLimit());
+//app.use(hpp());
 
 app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
