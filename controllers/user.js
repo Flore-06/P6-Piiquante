@@ -27,6 +27,7 @@ exports.signup = (req, res, next) => {
     .has().not().spaces()                           // Should not have spaces
     .is().not().oneOf(['Passw0rd', 'Password123']); // Blacklist these values
 
+
     // Inscription faite si propriétés respectées
     if (schema.validate(req.body.password) == true) {
         bcrypt.hash(req.body.password, 10)
@@ -44,7 +45,7 @@ exports.signup = (req, res, next) => {
     
     // Génère une erreur si propriétés du mot de passe non respectées
     else {
-        return res.status(400).json({ error: 'Format du mot de passe non respecté! Choisissez un mot de passe entre 8 et 100 caractères, au moins une lettre capitale et minuscule, et minimum deux chiffres' })
+        return res.status(400).json({ error: 'Format du mot de passe non respecté! Doit contenir 8 à 100 caractères, min 1 capitale, min 1 minuscule, min 2 chiffres' })
     }
             
 };
